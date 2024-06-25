@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {signInStart,signInSuccess,signInFailure} from '../redux/user/userSlice'; 
@@ -20,6 +20,7 @@ export default function SignIn() {
       [e.target.id]:e.target.value,
     })
   }
+
 
   const handleSubmit= async (e)=>{
     e.preventDefault();
@@ -47,6 +48,10 @@ export default function SignIn() {
         dispatch(signInFailure(error.message));
       }
     }
+
+    useEffect(() => {
+      dispatch(signInFailure(null)); 
+    }, [dispatch]);
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
