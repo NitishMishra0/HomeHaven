@@ -18,6 +18,7 @@ export default function Profile() {
   const [updateSuccess,setUpdateSuccess]=useState(false);
   const [showListingsError,setShowListingsError] = useState(false);
   const [userListings,setUserListings]= useState([]);
+  const [noListing,setNoListing]=useState(false);
 
   const dispatch= useDispatch();
 
@@ -115,10 +116,15 @@ export default function Profile() {
   const handleShowListings= async()=>{
     try{
       setShowListingsError(false);
+      setNoListing(false);
       const res=await fetch(`/api/user/listings/${currentUser._id}`);
       const data= await res.json();
       if (data.success===false){
         setShowListingsError(true);
+        return;
+      }
+      if (data.length===0){
+        setNoListing(true);
         return;
       }
       setUserListings(data);
@@ -192,6 +198,7 @@ export default function Profile() {
 
         <button onClick={handleShowListings} className="text-green-700 w-full">Show Listings</button>
         <p className="text-red-700 mt-5">{showListingsError ? 'Error showing listings' : ''}</p>
+        <p className="text-red-700 mt-5 text-center">{noListing ? 'No listings Yet' : ''}</p>
 
        {userListings && userListings.length>0 && 
           <div className="flex flex-col gap-4">
